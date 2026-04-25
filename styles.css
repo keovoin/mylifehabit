@@ -260,6 +260,59 @@ body {
 .compare-table .improved { color: var(--success); font-weight: 600; }
 .compare-table .worsened { color: var(--danger); font-weight: 600; }
 
+/* ====== DIABETES TRACKING LOG ====== */
+.diabetes-log { margin-top: 8px; }
+.log-section { margin-bottom: 20px; }
+.log-section-header {
+    display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 10px;
+    font-weight: 700; font-size: 0.85rem; margin-bottom: 10px; color: white;
+}
+.log-section-header.glycemic { background: linear-gradient(135deg, #3B82F6, #1D4ED8); }
+.log-section-header.metabolic { background: linear-gradient(135deg, #EF4444, #B91C1C); }
+.log-section-icon { font-size: 1.1rem; }
+.log-section-title { flex: 1; }
+.log-section-title-kh { font-size: 0.75rem; opacity: 0.85; }
+.log-subsection-header {
+    display: flex; align-items: center; gap: 6px; padding: 8px 12px;
+    background: var(--gray-100); border-radius: 8px; font-weight: 600; font-size: 0.8rem;
+    margin: 14px 0 8px; color: var(--gray-700);
+}
+.log-subsection-icon { font-size: 1rem; }
+.log-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 6px; }
+.log-table {
+    width: 100%; border-collapse: collapse; font-size: 0.72rem; min-width: 400px;
+}
+.log-table th {
+    background: var(--gray-100); padding: 8px 6px; text-align: center; font-weight: 600;
+    border: 1px solid var(--gray-200); font-size: 0.7rem; color: var(--gray-700);
+}
+.log-table td {
+    padding: 4px; border: 1px solid var(--gray-200); text-align: center; vertical-align: middle;
+}
+.log-col-label { min-width: 80px; text-align: left !important; padding-left: 8px !important; }
+.log-row-label {
+    text-align: left !important; padding: 6px 8px !important; font-weight: 600;
+    font-size: 0.72rem; color: var(--gray-700); white-space: nowrap;
+}
+.log-target-row { background: #FEF3C7; }
+.log-target-row .log-row-label { color: #92400E; font-weight: 700; }
+.log-input {
+    width: 100%; padding: 6px 4px; border: 1px solid var(--gray-200); border-radius: 6px;
+    text-align: center; font-size: 0.75rem; font-family: inherit; background: white;
+    transition: border-color 0.2s;
+}
+.log-input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 2px rgba(79,70,229,0.15); }
+.th-kh, .label-kh { font-size: 0.65rem; color: var(--gray-500); font-weight: 400; margin-top: 2px; }
+.log-actions {
+    display: flex; gap: 10px; margin-top: 16px;
+}
+.log-actions .btn-primary, .log-actions .btn-secondary { flex: 1; }
+.log-note { font-size: 0.7rem; color: var(--gray-500); margin-top: 10px; text-align: center; line-height: 1.5; }
+.log-status-saved {
+    text-align: center; padding: 8px; background: var(--success-light); color: var(--success);
+    border-radius: 8px; font-size: 0.78rem; font-weight: 600; margin-top: 10px;
+}
+
 /* ====== FOOTER ====== */
 .app-footer { padding: 14px 20px; padding-bottom: calc(24px + env(safe-area-inset-bottom, 20px)); background: var(--gray-800); color: var(--gray-300); font-size: 0.7rem; line-height: 1.5; text-align: center; flex-shrink: 0; }
 .app-footer strong { color: var(--warning); }

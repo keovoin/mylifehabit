@@ -77,6 +77,10 @@
                     <span class="tab-icon">😴</span>
                     <span class="tab-label" data-i18n="tabSleep">Sleep</span>
                 </button>
+                <button class="tab-btn" data-tab="diabetes" onclick="switchTab('diabetes')">
+                    <span class="tab-icon">🩸</span>
+                    <span class="tab-label" data-i18n="tabDiabetes">Diabetes</span>
+                </button>
                 <button class="tab-btn" data-tab="history" onclick="switchTab('history')">
                     <span class="tab-icon">📊</span>
                     <span class="tab-label" data-i18n="tabHistory">History</span>
@@ -340,6 +344,227 @@
                         <div id="sleep-result" class="result-box hidden"></div>
                         <div class="save-section hidden" id="sleep-save">
                             <button class="btn-save" onclick="saveResult('sleep')" data-i18n="saveResult">💾 Save Result</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- DIABETES TRACKING LOG TAB -->
+                <section id="tab-diabetes" class="tab-panel">
+                    <div class="card">
+                        <h2 class="card-title" data-i18n="diabetesTitle">🩸 Diabetes & Associated Risk Tracking Log</h2>
+                        <p class="card-desc" data-i18n="diabetesDesc">Track your diabetes markers and metabolic risks over time. Set targets with your doctor.</p>
+
+                        <div class="diabetes-log">
+                            <!-- Glycemic Control Section -->
+                            <div class="log-section">
+                                <div class="log-section-header glycemic">
+                                    <span class="log-section-icon">🩸</span>
+                                    <span class="log-section-title" data-i18n="glycemicControl">Glycemic Control</span>
+                                    <span class="log-section-title-kh" data-i18n="glycemicControlKh">ការគ្រប់គ្រងជាតិស្ករ</span>
+                                </div>
+                                <div class="log-table-wrap">
+                                    <table class="log-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="log-col-label" data-i18n="period">Period</th>
+                                                <th>
+                                                    <div data-i18n="fastingSugar">Fasting Sugar am</div>
+                                                    <div class="th-kh" data-i18n="fastingSugarKh">ជាតិស្ករពេលព្រឹកពោះទទេ</div>
+                                                </th>
+                                                <th>
+                                                    <div data-i18n="postMealSugar">Post-Meal Sugar</div>
+                                                    <div class="th-kh" data-i18n="postMealSugarKh">ជាតិស្ករក្រោយអាហារ</div>
+                                                </th>
+                                                <th>
+                                                    <div>HbA1c (%)</div>
+                                                </th>
+                                                <th>
+                                                    <div>HbA1c (mmol/mol)</div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="log-target-row">
+                                                <td class="log-row-label">
+                                                    <span data-i18n="targetGoal">Target/Goal</span><br>
+                                                    <span class="label-kh" data-i18n="targetGoalKh">គោលដៅ/កម្រិត</span>
+                                                </td>
+                                                <td><input type="number" class="log-input" data-field="glycemic_fasting_target" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="glycemic_postmeal_target" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="glycemic_hba1c_pct_target" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="glycemic_hba1c_mmol_target" step="any"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="log-row-label"><span data-i18n="month1">Month 1</span><br><span class="label-kh">ខែទី ១</span></td>
+                                                <td><input type="number" class="log-input" data-field="glycemic_fasting_m1" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="glycemic_postmeal_m1" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="glycemic_hba1c_pct_m1" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="glycemic_hba1c_mmol_m1" step="any"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="log-row-label"><span data-i18n="month3">Month 3</span><br><span class="label-kh">ខែទី ៣</span></td>
+                                                <td><input type="number" class="log-input" data-field="glycemic_fasting_m3" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="glycemic_postmeal_m3" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="glycemic_hba1c_pct_m3" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="glycemic_hba1c_mmol_m3" step="any"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="log-row-label"><span data-i18n="month6">Month 6</span><br><span class="label-kh">ខែទី ៦</span></td>
+                                                <td><input type="number" class="log-input" data-field="glycemic_fasting_m6" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="glycemic_postmeal_m6" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="glycemic_hba1c_pct_m6" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="glycemic_hba1c_mmol_m6" step="any"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="log-row-label"><span data-i18n="month9">Month 9</span><br><span class="label-kh">ខែទី ៩</span></td>
+                                                <td><input type="number" class="log-input" data-field="glycemic_fasting_m9" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="glycemic_postmeal_m9" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="glycemic_hba1c_pct_m9" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="glycemic_hba1c_mmol_m9" step="any"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="log-row-label"><span data-i18n="month12">Month 12</span><br><span class="label-kh">ខែទី ១២</span></td>
+                                                <td><input type="number" class="log-input" data-field="glycemic_fasting_m12" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="glycemic_postmeal_m12" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="glycemic_hba1c_pct_m12" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="glycemic_hba1c_mmol_m12" step="any"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Associated Metabolic Risks Section -->
+                            <div class="log-section">
+                                <div class="log-section-header metabolic">
+                                    <span class="log-section-icon">⚠️</span>
+                                    <span class="log-section-title" data-i18n="metabolicRisks">Associated Metabolic Risks</span>
+                                    <span class="log-section-title-kh" data-i18n="metabolicRisksKh">ហានិភ័យពាក់ព័ន្ធ</span>
+                                </div>
+
+                                <!-- Liver Enzymes -->
+                                <div class="log-subsection-header">
+                                    <span class="log-subsection-icon">🫀</span>
+                                    <span data-i18n="liverEnzymes">Liver Enzymes</span>
+                                    <span class="label-kh" data-i18n="liverEnzymesKh">អង់ស៊ីមថ្លើម</span>
+                                </div>
+                                <div class="log-table-wrap">
+                                    <table class="log-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="log-col-label" data-i18n="period">Period</th>
+                                                <th>SGPT (ALAT)</th>
+                                                <th>SGOT (ASAT)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="log-target-row">
+                                                <td class="log-row-label">
+                                                    <span data-i18n="targetGoal">Target/Goal</span><br>
+                                                    <span class="label-kh" data-i18n="targetGoalKh">គោលដៅ/កម្រិត</span>
+                                                </td>
+                                                <td><input type="number" class="log-input" data-field="liver_sgpt_target" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="liver_sgot_target" step="any"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="log-row-label"><span data-i18n="month1">Month 1</span><br><span class="label-kh">ខែទី ១</span></td>
+                                                <td><input type="number" class="log-input" data-field="liver_sgpt_m1" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="liver_sgot_m1" step="any"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="log-row-label"><span data-i18n="month3">Month 3</span><br><span class="label-kh">ខែទី ៣</span></td>
+                                                <td><input type="number" class="log-input" data-field="liver_sgpt_m3" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="liver_sgot_m3" step="any"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="log-row-label"><span data-i18n="month6">Month 6</span><br><span class="label-kh">ខែទី ៦</span></td>
+                                                <td><input type="number" class="log-input" data-field="liver_sgpt_m6" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="liver_sgot_m6" step="any"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="log-row-label"><span data-i18n="month9">Month 9</span><br><span class="label-kh">ខែទី ៩</span></td>
+                                                <td><input type="number" class="log-input" data-field="liver_sgpt_m9" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="liver_sgot_m9" step="any"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="log-row-label"><span data-i18n="month12">Month 12</span><br><span class="label-kh">ខែទី ១២</span></td>
+                                                <td><input type="number" class="log-input" data-field="liver_sgpt_m12" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="liver_sgot_m12" step="any"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Lipid Profile -->
+                                <div class="log-subsection-header">
+                                    <span class="log-subsection-icon">❤️</span>
+                                    <span data-i18n="lipidProfile">Lipid Profile</span>
+                                    <span class="label-kh" data-i18n="lipidProfileKh">ខ្លាញ់ក្នុងឈាម</span>
+                                </div>
+                                <div class="log-table-wrap">
+                                    <table class="log-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="log-col-label" data-i18n="period">Period</th>
+                                                <th>
+                                                    <div>Total Cholesterol</div>
+                                                </th>
+                                                <th>
+                                                    <div>HDL</div>
+                                                    <div class="th-kh">HDL (ខ្លាញ់ល្អ)</div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="log-target-row">
+                                                <td class="log-row-label">
+                                                    <span data-i18n="targetGoal">Target/Goal</span><br>
+                                                    <span class="label-kh" data-i18n="targetGoalKh">គោលដៅ/កម្រិត</span>
+                                                </td>
+                                                <td><input type="number" class="log-input" data-field="lipid_cholesterol_target" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="lipid_hdl_target" step="any"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="log-row-label"><span data-i18n="month1">Month 1</span><br><span class="label-kh">ខែទី ១</span></td>
+                                                <td><input type="number" class="log-input" data-field="lipid_cholesterol_m1" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="lipid_hdl_m1" step="any"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="log-row-label"><span data-i18n="month3">Month 3</span><br><span class="label-kh">ខែទី ៣</span></td>
+                                                <td><input type="number" class="log-input" data-field="lipid_cholesterol_m3" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="lipid_hdl_m3" step="any"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="log-row-label"><span data-i18n="month6">Month 6</span><br><span class="label-kh">ខែទី ៦</span></td>
+                                                <td><input type="number" class="log-input" data-field="lipid_cholesterol_m6" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="lipid_hdl_m6" step="any"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="log-row-label"><span data-i18n="month9">Month 9</span><br><span class="label-kh">ខែទី ៩</span></td>
+                                                <td><input type="number" class="log-input" data-field="lipid_cholesterol_m9" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="lipid_hdl_m9" step="any"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="log-row-label"><span data-i18n="month12">Month 12</span><br><span class="label-kh">ខែទី ១២</span></td>
+                                                <td><input type="number" class="log-input" data-field="lipid_cholesterol_m12" step="any"></td>
+                                                <td><input type="number" class="log-input" data-field="lipid_hdl_m12" step="any"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Save/Load Buttons -->
+                            <div class="log-actions">
+                                <button class="btn-primary" onclick="saveDiabetesLog()">
+                                    <span data-i18n="saveLog">💾 Save Log</span>
+                                </button>
+                                <button class="btn-secondary" onclick="clearDiabetesLog()">
+                                    <span data-i18n="clearLog">🗑️ Clear Log</span>
+                                </button>
+                            </div>
+                            <p class="log-note" data-i18n="logDoctorNote">⚠️ Set your targets based on your doctor's advice. This log is for personal tracking only.</p>
+                            <p class="log-note label-kh" data-i18n="logDoctorNoteKh">⚠️ កំណត់គោលដៅតាមការណែនាំរបស់គ្រូពេទ្យ។ កំណត់ត្រានេះសម្រាប់តាមដានផ្ទាល់ខ្លួនប៉ុណ្ណោះ។</p>
                         </div>
                     </div>
                 </section>

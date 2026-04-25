@@ -862,6 +862,43 @@ function analyzeSleep() {
 }
 
 // ==========================================
+// DIABETES TRACKING LOG
+// ==========================================
+function saveDiabetesLog() {
+    const data = {};
+    document.querySelectorAll('.log-input[data-field]').forEach(input => {
+        const val = input.value;
+        if (val !== '') data[input.dataset.field] = parseFloat(val);
+    });
+    localStorage.setItem('healthApp_diabetesLog', JSON.stringify(data));
+    showAlert(t('logSaved'));
+}
+
+function loadDiabetesLog() {
+    const saved = localStorage.getItem('healthApp_diabetesLog');
+    if (!saved) return;
+    const data = JSON.parse(saved);
+    document.querySelectorAll('.log-input[data-field]').forEach(input => {
+        const key = input.dataset.field;
+        if (data[key] !== undefined) input.value = data[key];
+    });
+}
+
+function clearDiabetesLog() {
+    if (!confirm(t('clearLogConfirm'))) return;
+    localStorage.removeItem('healthApp_diabetesLog');
+    document.querySelectorAll('.log-input[data-field]').forEach(input => { input.value = ''; });
+    showAlert(t('logCleared'));
+}
+
+// Load diabetes log when switching to the tab
+const origSwitchTab = switchTab;
+switchTab = function(tabName) {
+    origSwitchTab(tabName);
+    if (tabName === 'diabetes') loadDiabetesLog();
+};
+
+// ==========================================
 // UTILITY
 // ==========================================
 function showAlert(msg) {
