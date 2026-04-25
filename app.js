@@ -453,25 +453,25 @@ function analyzeLabResults() {
     const gender = document.getElementById('lab-gender').value;
 
     const tests = [
-        { id:'fbs', label:'FBS', unit:'mg/dL', normalMin:70, normalMax:100, warnMax:125, category:'blood_sugar' },
-        { id:'hba1c', label:'HbA1C', unit:'%', normalMin:4.0, normalMax:5.6, warnMax:6.4, category:'blood_sugar' },
-        { id:'sgpt', label:'SGPT/ALT', unit:'U/L', normalMin:7, normalMax:56, warnMax:80, category:'liver' },
-        { id:'sgot', label:'SGOT/AST', unit:'U/L', normalMin:10, normalMax:40, warnMax:60, category:'liver' },
-        { id:'hdl', label:'HDL', unit:'mg/dL', normalMin:gender==='male'?40:50, normalMax:999, warnMax:999, invertWarning:true, category:'cholesterol' },
+        { id:'fbs', label:'FBS', unit:'mg/dL', normalMin:75, normalMax:110, warnMax:125, category:'blood_sugar' },
+        { id:'hba1c', label:'HbA1C', unit:'%', normalMin:4.5, normalMax:6.4, warnMax:8.0, category:'blood_sugar' },
+        { id:'sgpt', label:'SGPT/ALT', unit:'UI/L', normalMin:0, normalMax:40, warnMax:80, category:'liver' },
+        { id:'sgot', label:'SGOT/AST', unit:'UI/L', normalMin:0, normalMax:37, warnMax:60, category:'liver' },
+        { id:'hdl', label:'HDL', unit:'mg/dL', normalMin:40, normalMax:999, warnMax:999, invertWarning:true, category:'cholesterol' },
         { id:'cholesterol', label:'Total Cholesterol', unit:'mg/dL', normalMin:0, normalMax:200, warnMax:240, category:'cholesterol' },
-        { id:'ldl', label:'LDL', unit:'mg/dL', normalMin:0, normalMax:100, warnMax:160, category:'cholesterol' },
-        { id:'triglycerides', label:'Triglycerides', unit:'mg/dL', normalMin:0, normalMax:150, warnMax:200, category:'cholesterol' },
-        { id:'creatinine', label:'Creatinine', unit:'mg/dL', normalMin:gender==='male'?0.7:0.6, normalMax:gender==='male'?1.3:1.1, warnMax:gender==='male'?1.8:1.5, category:'kidney' },
-        { id:'urea', label:'Urea/BUN', unit:'mg/dL', normalMin:7, normalMax:20, warnMax:30, category:'kidney' },
-        { id:'na', label:'Na', unit:'mEq/L', normalMin:136, normalMax:145, warnMax:150, category:'kidney' },
-        { id:'k', label:'K', unit:'mEq/L', normalMin:3.5, normalMax:5.0, warnMax:5.5, category:'kidney' },
-        { id:'cl', label:'Cl', unit:'mEq/L', normalMin:98, normalMax:106, warnMax:112, category:'kidney' },
-        { id:'rbc', label:'RBC', unit:'M/µL', normalMin:gender==='male'?4.5:4.0, normalMax:gender==='male'?5.5:5.0, warnMax:gender==='male'?6.0:5.5, category:'blood' },
-        { id:'mcv', label:'MCV', unit:'fL', normalMin:80, normalMax:100, warnMax:110, category:'blood' },
-        { id:'hemoglobin', label:'Hemoglobin', unit:'g/dL', normalMin:gender==='male'?13.5:12.0, normalMax:gender==='male'?17.5:16.0, warnMax:gender==='male'?19:17.5, category:'blood' },
-        { id:'eosinophils', label:'Eosinophils', unit:'%', normalMin:1, normalMax:4, warnMax:7, category:'other' },
-        { id:'pct', label:'PCT', unit:'%', normalMin:0.15, normalMax:0.40, warnMax:0.50, category:'other' },
-        { id:'wbc', label:'WBC', unit:'K/µL', normalMin:4.5, normalMax:11.0, warnMax:15.0, category:'other' }
+        { id:'ldl', label:'LDL', unit:'mg/dL', normalMin:0, normalMax:150, warnMax:190, category:'cholesterol' },
+        { id:'triglycerides', label:'Triglycerides', unit:'mg/dL', normalMin:0, normalMax:200, warnMax:250, category:'cholesterol' },
+        { id:'creatinine', label:'Creatinine', unit:'mg/dL', normalMin:0.7, normalMax:1.3, warnMax:1.8, category:'kidney' },
+        { id:'urea', label:'Urea/BUN', unit:'mg/dL', normalMin:13, normalMax:45, warnMax:60, category:'kidney' },
+        { id:'na', label:'Na', unit:'mmol/L', normalMin:135, normalMax:145, warnMax:155, category:'kidney' },
+        { id:'k', label:'K', unit:'mmol/L', normalMin:3.5, normalMax:5.0, warnMax:5.5, category:'kidney' },
+        { id:'cl', label:'Cl', unit:'mmol/L', normalMin:98, normalMax:107, warnMax:115, category:'kidney' },
+        { id:'rbc', label:'RBC', unit:'M/µL', normalMin:gender==='male'?4.50:4.0, normalMax:gender==='male'?5.50:5.0, warnMax:gender==='male'?6.0:5.5, category:'blood' },
+        { id:'mcv', label:'MCV', unit:'fL', normalMin:85, normalMax:95, warnMax:110, category:'blood' },
+        { id:'hemoglobin', label:'Hemoglobin', unit:'g/dL', normalMin:gender==='male'?13.0:12.0, normalMax:gender==='male'?18.0:16.0, warnMax:gender==='male'?20:17.5, category:'blood' },
+        { id:'eosinophils', label:'Eosinophils', unit:'%', normalMin:0, normalMax:3, warnMax:7, category:'other' },
+        { id:'pct', label:'PCT', unit:'%', normalMin:0.108, normalMax:0.282, warnMax:0.40, category:'other' },
+        { id:'wbc', label:'WBC', unit:'K/µL', normalMin:4.0, normalMax:10.0, warnMax:15.0, category:'other' }
     ];
 
     let results = []; let filled = 0;
