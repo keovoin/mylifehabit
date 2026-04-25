@@ -163,7 +163,7 @@ function viewRecord(id) {
         const normalCount = d.results.filter(r => r.status === 'normal').length;
         html += `<div class="score-container"><div class="score-circle ${scoreClass}">${d.score}</div><div class="score-label">${t('healthScore')} (${normalCount}/${d.results.length} ${t('normal')})</div></div>`;
         const cats = { blood_sugar: { label: t('bloodSugar'), results: [] }, liver: { label: t('liverFunction'), results: [] }, cholesterol: { label: t('cholesterol'), results: [] }, kidney: { label: t('kidneyFunction'), results: [] }, blood: { label: t('redBlood'), results: [] }, other: { label: t('otherTests'), results: [] } };
-        d.results.forEach(r => { if (cats[r.category]) cats[r.category].results.push(r); else { const cat = Object.keys(cats).find(k => r.id && k); if (!cat) { if (!cats.other) cats.other = {label:t('otherTests'),results:[]}; cats.other.results.push(r); } } });
+        d.results.forEach(r => { if (cats[r.category]) cats[r.category].results.push(r); else { if (!cats.other) cats.other = {label:t('otherTests'),results:[]}; cats.other.results.push(r); } });
         Object.values(cats).forEach(cat => {
             if (cat.results.length === 0) return;
             html += `<h4>${cat.label}</h4>`;
