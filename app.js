@@ -41,6 +41,7 @@ function logoutUser() {
         currentUser = null;
         localStorage.removeItem('healthApp_user');
         document.getElementById('login-screen').classList.add('active-screen');
+        document.getElementById('login-screen').style.display = '';
         document.getElementById('main-screen').classList.remove('active-screen');
         document.getElementById('main-screen').style.display = 'none';
     }
@@ -411,7 +412,7 @@ function calculateMeal() {
     });
     Object.keys(totals).forEach(k => totals[k] = Math.round(totals[k] * 10) / 10);
 
-    const proteinPct = (totals.protein * 4 / totals.cal * 100), fatPct = (totals.fat * 9 / totals.cal * 100), carbsPct = (totals.carbs * 4 / totals.cal * 100);
+    const proteinPct = totals.cal > 0 ? (totals.protein * 4 / totals.cal * 100) : 0, fatPct = totals.cal > 0 ? (totals.fat * 9 / totals.cal * 100) : 0, carbsPct = totals.cal > 0 ? (totals.carbs * 4 / totals.cal * 100) : 0;
     let rating = '', rClass = '', tips = [];
     if (proteinPct >= 20 && fatPct <= 35 && totals.fiber >= 3) { rating = 'Excellent'; rClass = 'good'; }
     else if (proteinPct >= 15 && fatPct <= 40) { rating = 'Good'; rClass = 'good'; }
