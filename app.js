@@ -604,7 +604,7 @@ function analyzeLabResults() {
     // Show save section
     const saveSection = document.createElement('div');
     saveSection.className = 'save-section';
-    saveSection.innerHTML = `<button class="btn-save" onclick="saveResult('lab')">💾 ${t('saveResult')} (Track ${selectedTrack})</button>`;
+    saveSection.innerHTML = `<button class="btn-save" onclick="saveResult('lab')">${t('saveResult')} (Track ${selectedTrack})</button>`;
     el.appendChild(saveSection);
 }
 
