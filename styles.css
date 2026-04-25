@@ -261,7 +261,7 @@ body {
 .compare-table .worsened { color: var(--danger); font-weight: 600; }
 
 /* ====== FOOTER ====== */
-.app-footer { padding: 14px 20px 24px; background: var(--gray-800); color: var(--gray-300); font-size: 0.7rem; line-height: 1.5; text-align: center; }
+.app-footer { padding: 14px 20px; padding-bottom: calc(24px + env(safe-area-inset-bottom, 20px)); background: var(--gray-800); color: var(--gray-300); font-size: 0.7rem; line-height: 1.5; text-align: center; flex-shrink: 0; }
 .app-footer strong { color: var(--warning); }
 .footer-credit { margin-top: 6px; font-size: 0.72rem; color: var(--gray-400); }
 .footer-credit strong { color: white; }
