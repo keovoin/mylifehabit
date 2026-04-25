@@ -137,11 +137,90 @@ function renderHistory() {
             </div>
             <div class="history-card-body">${r.summary || JSON.stringify(r.data).substring(0, 100) + '...'}</div>
             <div class="history-card-actions">
+                <button class="view-btn" onclick="viewRecord(${r.id})">👁️ ${t('view')}</button>
                 <label><input type="checkbox" class="compare-check" data-id="${r.id}"> ${t('compare')}</label>
                 <button class="delete-btn" onclick="deleteRecord(${r.id})">${t('delete')}</button>
             </div>
         </div>
     `).join('');
+}
+
+function viewRecord(id) {
+    const record = getRecords().find(r => r.id === id);
+    if (!record) return;
+    const d = record.data;
+    const dateStr = new Date(record.date).toLocaleDateString() + ' ' + new Date(record.date).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+    let html = `<div class="detail-view-overlay" onclick="if(event.target===this)closeDetailView()">
+        <div class="detail-view-panel">
+        <div class="detail-view-header">
+            <span class="history-card-type ${record.category}">${record.category.toUpperCase()}</span>
+            <span>${dateStr}</span>
+            <button class="detail-close-btn" onclick="closeDetailView()">✕</button>
+        </div>`;
+
+    if (record.category === 'lab' && d.results) {
+        const scoreClass = d.score >= 80 ? 'good' : d.score >= 60 ? 'warning' : 'danger';
+        const normalCount = d.results.filter(r => r.status === 'normal').length;
+        html += `<div class="score-container"><div class="score-circle ${scoreClass}">${d.score}</div><div class="score-label">${t('healthScore')} (${normalCount}/${d.results.length} ${t('normal')})</div></div>`;
+        const cats = { blood_sugar: { label: t('bloodSugar'), results: [] }, liver: { label: t('liverFunction'), results: [] }, cholesterol: { label: t('cholesterol'), results: [] }, kidney: { label: t('kidneyFunction'), results: [] }, blood: { label: t('redBlood'), results: [] }, other: { label: t('otherTests'), results: [] } };
+        d.results.forEach(r => { if (cats[r.category]) cats[r.category].results.push(r); else { const cat = Object.keys(cats).find(k => r.id && k); if (!cat) { if (!cats.other) cats.other = {label:t('otherTests'),results:[]}; cats.other.results.push(r); } } });
+        Object.values(cats).forEach(cat => {
+            if (cat.results.length === 0) return;
+            html += `<h4>${cat.label}</h4>`;
+            cat.results.forEach(r => {
+                const statusIcon = r.status === 'normal' ? '✅' : r.status === 'warning' ? '🟡' : '🔴';
+                const normalRange = `${r.normalMin} - ${r.normalMax === 999 ? '∞' : r.normalMax}`;
+                html += `<div class="lab-result-card ${r.status}"><div class="lab-test-name">${r.label}</div><div class="lab-test-value">Your: <strong>${r.value} ${r.unit}</strong> | Normal: ${normalRange} ${r.unit}</div><div class="lab-test-status">${statusIcon} ${r.status.charAt(0).toUpperCase() + r.status.slice(1)}</div></div>`;
+            });
+        });
+    } else if (record.category === 'exercise') {
+        html += `<div class="result-item"><span class="result-label">${t('exerciseType')}</span><span class="result-value">${d.exercise || '-'}</span></div>`;
+        html += `<div class="result-item"><span class="result-label">${t('duration')}</span><span class="result-value">${d.duration || '-'} min</span></div>`;
+        html += `<div class="result-item"><span class="result-label">${t('caloriesBurned')}</span><span class="result-value">${d.calories || '-'} kcal</span></div>`;
+        if (d.pace) html += `<div class="result-item"><span class="result-label">${t('avgPace')}</span><span class="result-value">${d.pace}</span></div>`;
+        if (d.speed) html += `<div class="result-item"><span class="result-label">${t('avgSpeed')}</span><span class="result-value">${d.speed}</span></div>`;
+        if (d.fatBurned) html += `<div class="result-item"><span class="result-label">${t('fatBurned')}</span><span class="result-value">${d.fatBurned}</span></div>`;
+    } else if (record.category === 'food') {
+        if (d.totals) {
+            html += `<table class="summary-table"><thead><tr><th>${t('nutrient')}</th><th>${t('amount')}</th></tr></thead><tbody>`;
+            html += `<tr><td>${t('calories')}</td><td>${d.totals.cal} kcal</td></tr>`;
+            html += `<tr><td>${t('protein')}</td><td>${d.totals.protein} g</td></tr>`;
+            html += `<tr><td>${t('carbs')}</td><td>${d.totals.carbs} g</td></tr>`;
+            html += `<tr><td>${t('fat')}</td><td>${d.totals.fat} g</td></tr>`;
+            html += `<tr><td>${t('fiber')}</td><td>${d.totals.fiber} g</td></tr>`;
+            html += `<tr><td>${t('sugar')}</td><td>${d.totals.sugar} g</td></tr>`;
+            html += `</tbody></table>`;
+            if (d.rating) html += `<div class="result-item"><span class="result-label">${t('healthRating')}</span><span class="result-value">${d.rating}</span></div>`;
+        }
+    } else if (record.category === 'bmi') {
+        const catClass = d.bmi < 18.5 ? 'info' : d.bmi < 25 ? 'good' : d.bmi < 30 ? 'warning' : 'danger';
+        html += `<div class="score-container"><div class="score-circle ${catClass}">${d.bmi}</div><div class="score-label">${d.category || ''}</div></div>`;
+        if (d.bmr) html += `<div class="result-item"><span class="result-label">${t('bmr')}</span><span class="result-value">${d.bmr} kcal</span></div>`;
+        if (d.tdee) html += `<div class="result-item"><span class="result-label">${t('tdee')}</span><span class="result-value">${d.tdee} kcal</span></div>`;
+    } else if (record.category === 'sleep') {
+        const ratingClass = d.score >= 80 ? 'good' : d.score >= 60 ? 'info' : d.score >= 40 ? 'warning' : 'danger';
+        html += `<div class="score-container"><div class="score-circle ${ratingClass}">${d.score}</div><div class="score-label">${d.rating || ''}</div></div>`;
+        if (d.hours) html += `<div class="result-item"><span class="result-label">${t('sleepDuration')}</span><span class="result-value">${d.hours}</span></div>`;
+        if (d.cycles) html += `<div class="result-item"><span class="result-label">${t('sleepCycles')}</span><span class="result-value">${d.cycles} cycles</span></div>`;
+    } else {
+        html += `<div class="history-card-body" style="padding:10px">${record.summary || JSON.stringify(d)}</div>`;
+    }
+
+    html += `<button class="btn-outline" onclick="closeDetailView()" style="margin-top:12px;width:100%">${t('close')}</button></div></div>`;
+
+    let container = document.getElementById('detail-view');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'detail-view';
+        document.body.appendChild(container);
+    }
+    container.innerHTML = html;
+    container.classList.remove('hidden');
+}
+
+function closeDetailView() {
+    const el = document.getElementById('detail-view');
+    if (el) el.classList.add('hidden');
 }
 
 function toggleCompare() {
@@ -516,7 +595,7 @@ function analyzeLabResults() {
     html += generateSuggestions(results, age, gender);
     html += `<div class="suggestion-disclaimer">⚠️ <strong>${t('importantDisclaimer')}:</strong> ${t('disclaimerFull')}</div>`;
 
-    lastResults.lab = { results: results.map(r => ({ id: r.id, label: r.label, value: r.value, unit: r.unit, status: r.status, normalMin: r.normalMin, normalMax: r.normalMax })), score, summary: `Score: ${score}/100 | ${normalCount}/${results.length} normal` };
+    lastResults.lab = { results: results.map(r => ({ id: r.id, label: r.label, value: r.value, unit: r.unit, status: r.status, normalMin: r.normalMin, normalMax: r.normalMax, category: r.category })), score, summary: `Score: ${score}/100 | ${normalCount}/${results.length} normal` };
 
     const el = document.getElementById('lab-result');
     el.classList.remove('hidden');
