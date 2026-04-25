@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Health & Lifestyle Tool</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Login Screen -->
+        <div id="login-screen" class="screen active-screen">
+            <div class="login-container">
+                <div class="login-logo">🏃‍♂️</div>
+                <h1 class="login-title" data-i18n="appTitle">Health & Lifestyle</h1>
+                <p class="login-subtitle" data-i18n="appSubtitle">Your personal wellness companion</p>
+                <div class="lang-toggle-login">
+                    <button class="lang-btn active" onclick="setLanguage('en')">EN</button>
+                    <button class="lang-btn" onclick="setLanguage('kh')">ខ្មែរ</button>
+                </div>
+                <div class="form-group" style="margin-top:24px;">
+                    <label data-i18n="yourName">Your Name</label>
+                    <input type="text" id="login-name" placeholder="Enter your name" data-i18n-placeholder="enterName">
+                </div>
+                <button class="btn-primary" onclick="loginUser()" data-i18n="startBtn">Get Started</button>
+                <p class="login-note" data-i18n="loginNote">Your data is saved locally on your device.</p>
+            </div>
+        </div>
+
+        <!-- Main App Screen -->
+        <div id="main-screen" class="screen">
+            <!-- Header -->
+            <header class="app-header">
+                <div class="header-top">
+                    <div class="header-user">
+                        <span class="user-avatar" id="user-avatar">U</span>
+                        <span class="user-name" id="user-name-display">User</span>
+                    </div>
+                    <div class="header-actions">
+                        <div class="lang-toggle">
+                            <button class="lang-btn-sm active" onclick="setLanguage('en')">EN</button>
+                            <button class="lang-btn-sm" onclick="setLanguage('kh')">ខ្មែរ</button>
+                        </div>
+                        <button class="btn-icon" onclick="logoutUser()" title="Logout">⏻</button>
+                    </div>
+                </div>
+                <h1 class="header-title" data-i18n="appTitle">Health & Lifestyle</h1>
+            </header>
+
+            <!-- Navigation Tabs -->
+            <nav class="tab-nav">
+                <button class="tab-btn active" data-tab="exercise" onclick="switchTab('exercise')">
+                    <span class="tab-icon">🏃</span>
+                    <span class="tab-label" data-i18n="tabExercise">Exercise</span>
+                </button>
+                <button class="tab-btn" data-tab="food" onclick="switchTab('food')">
+                    <span class="tab-icon">🥗</span>
+                    <span class="tab-label" data-i18n="tabFood">Food</span>
+                </button>
+                <button class="tab-btn" data-tab="lab" onclick="switchTab('lab')">
+                    <span class="tab-icon">🔬</span>
+                    <span class="tab-label" data-i18n="tabLab">Lab</span>
+                </button>
+                <button class="tab-btn" data-tab="bmi" onclick="switchTab('bmi')">
+                    <span class="tab-icon">⚖️</span>
+                    <span class="tab-label" data-i18n="tabBmi">BMI</span>
+                </button>
+                <button class="tab-btn" data-tab="water" onclick="switchTab('water')">
+                    <span class="tab-icon">💧</span>
+                    <span class="tab-label" data-i18n="tabWater">Water</span>
+                </button>
+                <button class="tab-btn" data-tab="sleep" onclick="switchTab('sleep')">
+                    <span class="tab-icon">😴</span>
+                    <span class="tab-label" data-i18n="tabSleep">Sleep</span>
+                </button>
+                <button class="tab-btn" data-tab="history" onclick="switchTab('history')">
+                    <span class="tab-icon">📊</span>
+                    <span class="tab-label" data-i18n="tabHistory">History</span>
+                </button>
+            </nav>
+
+            <!-- Tab Contents -->
+            <main class="tab-content">
+                <!-- EXERCISE TAB -->
+                <section id="tab-exercise" class="tab-panel active">
+                    <div class="card">
+                        <h2 class="card-title" data-i18n="exerciseTitle">🏃 Exercise & Calorie Calculator</h2>
+                        <p class="card-desc" data-i18n="exerciseDesc">Calculate calories burned from running, walking, and more.</p>
+                        <div class="form-group">
+                            <label data-i18n="weight">Weight (kg)</label>
+                            <input type="number" id="ex-weight" placeholder="e.g. 70" min="20" max="300">
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="distance">Distance (km)</label>
+                            <input type="number" id="ex-distance" placeholder="e.g. 5" min="0.1" max="200" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="duration">Duration (minutes)</label>
+                            <input type="number" id="ex-duration" placeholder="e.g. 30" min="1" max="600">
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="exerciseType">Exercise Type</label>
+                            <select id="ex-type">
+                                <option value="walking_slow" data-i18n="walkSlow">Slow Walking (3-4 km/h)</option>
+                                <option value="walking" data-i18n="walkNormal">Walking (4-6 km/h)</option>
+                                <option value="walking_fast" data-i18n="walkFast">Brisk Walking (6-7 km/h)</option>
+                                <option value="jogging" data-i18n="jogging">Jogging (7-9 km/h)</option>
+                                <option value="running" data-i18n="running" selected>Running (9-12 km/h)</option>
+                                <option value="fast" data-i18n="fastRun">Fast Running (12-16 km/h)</option>
+                                <option value="sprint" data-i18n="sprint">Sprinting (16+ km/h)</option>
+                                <option value="hiking" data-i18n="hiking">Hiking</option>
+                                <option value="cycling" data-i18n="cycling">Cycling</option>
+                                <option value="swimming" data-i18n="swimming">Swimming</option>
+                            </select>
+                        </div>
+                        <button class="btn-primary" onclick="calculateExercise()" data-i18n="calculate">Calculate</button>
+                        <div id="exercise-result" class="result-box hidden"></div>
+                        <div class="save-section hidden" id="exercise-save">
+                            <button class="btn-save" onclick="saveResult('exercise')" data-i18n="saveResult">💾 Save Result</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- FOOD TAB -->
+                <section id="tab-food" class="tab-panel">
+                    <div class="card">
+                        <h2 class="card-title" data-i18n="foodTitle">🥗 Food & Nutrition Simulator</h2>
+                        <p class="card-desc" data-i18n="foodDesc">Build your meal and check nutritional value.</p>
+                        <div class="form-group">
+                            <label data-i18n="foodCategory">Food Category</label>
+                            <select id="food-category" onchange="updateFoodItems()">
+                                <option value="" data-i18n="chooseCategory">-- Choose Category --</option>
+                                <option value="fruits" data-i18n="fruits">Fruits</option>
+                                <option value="vegetables" data-i18n="vegetables">Vegetables</option>
+                                <option value="proteins" data-i18n="proteins">Proteins</option>
+                                <option value="grains" data-i18n="grains">Grains & Carbs</option>
+                                <option value="dairy" data-i18n="dairy">Dairy</option>
+                                <option value="beverages" data-i18n="beverages">Beverages</option>
+                                <option value="snacks" data-i18n="snacks">Snacks</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="foodItem">Food Item</label>
+                            <select id="food-item"><option value="">-- Choose Food --</option></select>
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="quantity">Quantity (grams)</label>
+                            <input type="number" id="food-qty" placeholder="e.g. 100" min="1" max="5000">
+                        </div>
+                        <button class="btn-secondary" onclick="addFoodItem()" data-i18n="addMeal">+ Add to Meal</button>
+                        <div id="meal-list" class="meal-list"></div>
+                        <button class="btn-primary" onclick="calculateMeal()" id="calc-meal-btn" style="display:none;" data-i18n="analyzeMeal">Analyze Meal</button>
+                        <div id="food-result" class="result-box hidden"></div>
+                        <div class="save-section hidden" id="food-save">
+                            <button class="btn-save" onclick="saveResult('food')" data-i18n="saveResult">💾 Save Result</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- LAB RESULTS TAB -->
+                <section id="tab-lab" class="tab-panel">
+                    <div class="card">
+                        <h2 class="card-title" data-i18n="labTitle">🔬 Lab Results Analyzer</h2>
+                        <p class="card-desc" data-i18n="labDesc">Enter lab values and get instant health feedback.</p>
+                        <div class="disclaimer-banner">
+                            ⚠️ <strong data-i18n="important">Important:</strong> <span data-i18n="disclaimerText">This tool provides general suggestions only. Always consult your doctor.</span>
+                        </div>
+
+                        <!-- Track Selector -->
+                        <div class="track-selector">
+                            <label data-i18n="saveToTrack">Save to Track:</label>
+                            <div class="track-btns">
+                                <button class="track-btn active" onclick="selectTrack(1)" data-track="1" data-i18n="track1">Track 1 (Main)</button>
+                                <button class="track-btn" onclick="selectTrack(2)" data-track="2" data-i18n="track2">Track 2</button>
+                                <button class="track-btn" onclick="selectTrack(3)" data-track="3" data-i18n="track3">Track 3</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group half">
+                                <label data-i18n="age">Age</label>
+                                <input type="number" id="lab-age" placeholder="35" min="1" max="120">
+                            </div>
+                            <div class="form-group half">
+                                <label data-i18n="gender">Gender</label>
+                                <select id="lab-gender">
+                                    <option value="male" data-i18n="male">Male</option>
+                                    <option value="female" data-i18n="female">Female</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Blood Sugar -->
+                        <div class="lab-section">
+                            <h3 class="lab-section-title" data-i18n="bloodSugar">🩸 Blood Sugar</h3>
+                            <div class="form-group">
+                                <label>FBS (mg/dL)</label>
+                                <input type="number" id="lab-fbs" placeholder="70-100" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label>HbA1C (%)</label>
+                                <input type="number" id="lab-hba1c" placeholder="< 5.7" step="0.1">
+                            </div>
+                        </div>
+                        <!-- Liver -->
+                        <div class="lab-section">
+                            <h3 class="lab-section-title" data-i18n="liverFunction">🫀 Liver Function</h3>
+                            <div class="form-group">
+                                <label>SGPT / ALT (U/L)</label>
+                                <input type="number" id="lab-sgpt" placeholder="7-56" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label>SGOT / AST (U/L)</label>
+                                <input type="number" id="lab-sgot" placeholder="10-40" step="0.1">
+                            </div>
+                        </div>
+                        <!-- Cholesterol -->
+                        <div class="lab-section">
+                            <h3 class="lab-section-title" data-i18n="cholesterol">💛 Cholesterol</h3>
+                            <div class="form-group">
+                                <label>HDL (mg/dL)</label>
+                                <input type="number" id="lab-hdl" placeholder="> 40(M), > 50(F)" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label data-i18n="totalCholesterol">Total Cholesterol (mg/dL)</label>
+                                <input type="number" id="lab-cholesterol" placeholder="< 200" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label>LDL (mg/dL) <span class="optional-tag">Optional</span></label>
+                                <input type="number" id="lab-ldl" placeholder="< 100" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label data-i18n="triglycerides">Triglycerides (mg/dL) <span class="optional-tag">Optional</span></label>
+                                <input type="number" id="lab-triglycerides" placeholder="< 150" step="0.1">
+                            </div>
+                        </div>
+                        <!-- Kidney -->
+                        <div class="lab-section">
+                            <h3 class="lab-section-title" data-i18n="kidneyFunction">🫘 Kidney Function</h3>
+                            <div class="form-group"><label>Creatinine (mg/dL)</label><input type="number" id="lab-creatinine" placeholder="0.7-1.3(M)" step="0.01"></div>
+                            <div class="form-group"><label>Urea / BUN (mg/dL)</label><input type="number" id="lab-urea" placeholder="7-20" step="0.1"></div>
+                            <div class="form-group"><label>Na (mEq/L)</label><input type="number" id="lab-na" placeholder="136-145" step="0.1"></div>
+                            <div class="form-group"><label>K (mEq/L)</label><input type="number" id="lab-k" placeholder="3.5-5.0" step="0.01"></div>
+                            <div class="form-group"><label>Cl (mEq/L)</label><input type="number" id="lab-cl" placeholder="98-106" step="0.1"></div>
+                        </div>
+                        <!-- Red Blood -->
+                        <div class="lab-section">
+                            <h3 class="lab-section-title" data-i18n="redBlood">🔴 Red Blood Cells</h3>
+                            <div class="form-group"><label>RBC (million/µL)</label><input type="number" id="lab-rbc" placeholder="4.5-5.5(M)" step="0.01"></div>
+                            <div class="form-group"><label>MCV (fL)</label><input type="number" id="lab-mcv" placeholder="80-100" step="0.1"></div>
+                            <div class="form-group"><label>Hemoglobin (g/dL) <span class="optional-tag">Optional</span></label><input type="number" id="lab-hemoglobin" placeholder="13.5-17.5(M)" step="0.1"></div>
+                        </div>
+                        <!-- Other -->
+                        <div class="lab-section">
+                            <h3 class="lab-section-title" data-i18n="otherTests">🧪 Other Tests</h3>
+                            <div class="form-group"><label>Eosinophils (%)</label><input type="number" id="lab-eosinophils" placeholder="1-4" step="0.1"></div>
+                            <div class="form-group"><label>PCT (%)</label><input type="number" id="lab-pct" placeholder="0.15-0.40" step="0.01"></div>
+                            <div class="form-group"><label>WBC (thousand/µL) <span class="optional-tag">Optional</span></label><input type="number" id="lab-wbc" placeholder="4.5-11.0" step="0.1"></div>
+                        </div>
+                        <button class="btn-primary" onclick="analyzeLabResults()" data-i18n="analyzeResults">Analyze Results</button>
+                        <div id="lab-result" class="result-box hidden"></div>
+                    </div>
+                </section>
+
+                <!-- BMI TAB -->
+                <section id="tab-bmi" class="tab-panel">
+                    <div class="card">
+                        <h2 class="card-title" data-i18n="bmiTitle">⚖️ BMI Calculator</h2>
+                        <p class="card-desc" data-i18n="bmiDesc">Calculate BMI, BMR, and daily calorie needs.</p>
+                        <div class="form-group"><label data-i18n="weight">Weight (kg)</label><input type="number" id="bmi-weight" placeholder="70" min="20" max="300"></div>
+                        <div class="form-group"><label data-i18n="height">Height (cm)</label><input type="number" id="bmi-height" placeholder="170" min="100" max="250"></div>
+                        <div class="form-group"><label data-i18n="age">Age</label><input type="number" id="bmi-age" placeholder="30" min="1" max="120"></div>
+                        <div class="form-group"><label data-i18n="gender">Gender</label><select id="bmi-gender"><option value="male" data-i18n="male">Male</option><option value="female" data-i18n="female">Female</option></select></div>
+                        <div class="form-group"><label data-i18n="activityLevel">Activity Level</label>
+                            <select id="bmi-activity">
+                                <option value="sedentary" data-i18n="sedentary">Sedentary</option>
+                                <option value="light" data-i18n="lightActive">Lightly Active</option>
+                                <option value="moderate" data-i18n="moderateActive">Moderately Active</option>
+                                <option value="active" data-i18n="veryActive">Very Active</option>
+                                <option value="extra" data-i18n="extraActive">Extra Active</option>
+                            </select>
+                        </div>
+                        <button class="btn-primary" onclick="calculateBMI()" data-i18n="calculateBmi">Calculate BMI & TDEE</button>
+                        <div id="bmi-result" class="result-box hidden"></div>
+                        <div class="save-section hidden" id="bmi-save">
+                            <button class="btn-save" onclick="saveResult('bmi')" data-i18n="saveResult">💾 Save Result</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- WATER TAB -->
+                <section id="tab-water" class="tab-panel">
+                    <div class="card">
+                        <h2 class="card-title" data-i18n="waterTitle">💧 Water Intake Tracker</h2>
+                        <p class="card-desc" data-i18n="waterDesc">Track daily water intake and stay hydrated.</p>
+                        <div class="form-group"><label data-i18n="weight">Weight (kg)</label><input type="number" id="water-weight" placeholder="70" min="20" max="300"></div>
+                        <div class="form-group"><label data-i18n="activityLevel">Activity Level</label>
+                            <select id="water-activity"><option value="sedentary" data-i18n="sedentary">Sedentary</option><option value="moderate" data-i18n="moderateActive">Moderate</option><option value="active" data-i18n="veryActive">Active</option></select>
+                        </div>
+                        <div class="form-group"><label data-i18n="climate">Climate</label>
+                            <select id="water-climate"><option value="temperate" data-i18n="temperate">Temperate</option><option value="hot" data-i18n="hot">Hot / Tropical</option><option value="cold" data-i18n="cold">Cold</option></select>
+                        </div>
+                        <button class="btn-primary" onclick="calculateWater()" data-i18n="calcGoal">Calculate Daily Goal</button>
+                        <div id="water-goal" class="result-box hidden"></div>
+                        <div id="water-tracker" class="hidden" style="margin-top:20px;">
+                            <h3 style="text-align:center;margin-bottom:15px;" data-i18n="todayProgress">Today's Progress</h3>
+                            <div class="water-progress-container"><div class="water-progress-bar" id="water-bar" style="height:0%"></div><span class="water-progress-text" id="water-progress-text">0%</span></div>
+                            <p id="water-intake-display" style="text-align:center;font-weight:600;margin:10px 0;">0 mL / 0 mL</p>
+                            <div class="water-btn-group">
+                                <button class="btn-water" onclick="addWater(150)">+150mL</button>
+                                <button class="btn-water" onclick="addWater(250)">+250mL</button>
+                                <button class="btn-water" onclick="addWater(500)">+500mL</button>
+                            </div>
+                            <button class="btn-outline" onclick="resetWater()" style="margin-top:10px;width:100%;" data-i18n="reset">Reset</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SLEEP TAB -->
+                <section id="tab-sleep" class="tab-panel">
+                    <div class="card">
+                        <h2 class="card-title" data-i18n="sleepTitle">😴 Sleep Quality Calculator</h2>
+                        <p class="card-desc" data-i18n="sleepDesc">Analyze your sleep patterns and get recommendations.</p>
+                        <div class="form-group"><label data-i18n="bedtime">Bedtime</label><input type="time" id="sleep-bedtime" value="23:00"></div>
+                        <div class="form-group"><label data-i18n="wakeTime">Wake-up Time</label><input type="time" id="sleep-wake" value="06:30"></div>
+                        <div class="form-group"><label data-i18n="sleepQuality">How do you feel?</label>
+                            <select id="sleep-quality">
+                                <option value="great" data-i18n="great">Great / Refreshed</option>
+                                <option value="ok" data-i18n="ok">OK / Average</option>
+                                <option value="tired" data-i18n="tired">Tired / Groggy</option>
+                                <option value="bad" data-i18n="bad">Bad / Exhausted</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label data-i18n="age">Age</label><input type="number" id="sleep-age" placeholder="30" min="1" max="120"></div>
+                        <button class="btn-primary" onclick="analyzeSleep()" data-i18n="analyzeSleep">Analyze Sleep</button>
+                        <div id="sleep-result" class="result-box hidden"></div>
+                        <div class="save-section hidden" id="sleep-save">
+                            <button class="btn-save" onclick="saveResult('sleep')" data-i18n="saveResult">💾 Save Result</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- HISTORY TAB -->
+                <section id="tab-history" class="tab-panel">
+                    <div class="card">
+                        <h2 class="card-title" data-i18n="historyTitle">📊 Saved Results & Progress</h2>
+                        <p class="card-desc" data-i18n="historyDesc">View and compare your saved health records across tracks.</p>
+
+                        <div class="track-selector">
+                            <label data-i18n="viewTrack">View Track:</label>
+                            <div class="track-btns">
+                                <button class="track-btn active" onclick="viewTrack(1)" data-view-track="1" data-i18n="track1">Track 1 (Main)</button>
+                                <button class="track-btn" onclick="viewTrack(2)" data-view-track="2" data-i18n="track2">Track 2</button>
+                                <button class="track-btn" onclick="viewTrack(3)" data-view-track="3" data-i18n="track3">Track 3</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label data-i18n="filterCategory">Filter by Category:</label>
+                            <select id="history-filter" onchange="renderHistory()">
+                                <option value="all" data-i18n="all">All</option>
+                                <option value="exercise" data-i18n="tabExercise">Exercise</option>
+                                <option value="food" data-i18n="tabFood">Food</option>
+                                <option value="lab" data-i18n="tabLab">Lab Results</option>
+                                <option value="bmi" data-i18n="tabBmi">BMI</option>
+                                <option value="sleep" data-i18n="tabSleep">Sleep</option>
+                            </select>
+                        </div>
+
+                        <div class="compare-section">
+                            <button class="btn-secondary" onclick="toggleCompare()" data-i18n="compareResults">📈 Compare Results</button>
+                        </div>
+
+                        <div id="history-list"></div>
+                        <div id="compare-view" class="hidden"></div>
+                    </div>
+                </section>
+
+            </main>
+
+            <!-- Footer -->
+            <footer class="app-footer">
+                <p>⚠️ <strong data-i18n="disclaimer">Disclaimer:</strong> <span data-i18n="footerDisclaimer">This tool provides general suggestions only. NOT a substitute for medical advice. Consult your doctor.</span></p>
+                <p class="footer-credit">Created by <strong>K.Pichyvoin</strong></p>
+                <p class="footer-copy">&copy; 2026 Health & Lifestyle Tool</p>
+            </footer>
+        </div>
+    </div>
+
+    <script src="i18n.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
