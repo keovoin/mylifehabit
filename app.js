@@ -232,6 +232,7 @@ function toggleCompare() {
     const compareEl = document.getElementById('compare-view');
     compareEl.classList.remove('hidden');
 
+    if (records.length === 0) { showAlert(t('selectTwo')); return; }
     if (records.every(r => r.category === 'lab') && records[0].data.results) {
         compareEl.innerHTML = renderLabComparison(records);
     } else if (records.every(r => r.category === 'exercise')) {
