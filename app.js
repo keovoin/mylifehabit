@@ -348,7 +348,7 @@ function calculateExercise() {
     tips.push('Hydrate with 150-250 mL water every 20 minutes.');
     tips.push('Cool down with 5-10 minutes of stretching after exercise.');
 
-    lastResults.exercise = { calories, pace: paceStr, speed: speed + ' km/h', fatBurned: fatBurned + ' kg', level, summary: `${calories} kcal | ${distance} km | ${paceStr} | ${level}` };
+    lastResults.exercise = { exercise: exType, duration, calories, pace: paceStr, speed: speed + ' km/h', fatBurned: fatBurned + ' kg', level, summary: `${calories} kcal | ${distance} km | ${paceStr} | ${level}` };
 
     const el = document.getElementById('exercise-result');
     el.classList.remove('hidden');
