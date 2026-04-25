@@ -793,7 +793,8 @@ function analyzeSleep() {
     const [bH, bM] = bedtime.split(':').map(Number);
     const [wH, wM] = wake.split(':').map(Number);
     let bedMin = bH * 60 + bM, wakeMin = wH * 60 + wM;
-    if (wakeMin <= bedMin) wakeMin += 1440;
+    if (wakeMin === bedMin) { showAlert('Bedtime and wake time cannot be the same.'); return; }
+    if (wakeMin < bedMin) wakeMin += 1440;
     const totalMin = wakeMin - bedMin;
     const hours = Math.floor(totalMin / 60);
     const mins = totalMin % 60;
